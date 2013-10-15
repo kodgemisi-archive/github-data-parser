@@ -19,10 +19,13 @@ module GithubDataParser
         config.per_page = 100
       end
 
-
-      puts github_api.repos.list user: 'beydogan'
-
+      return self
     end
+
+    def get_user_repos(username)
+      github_api.repos.list user: username
+    end
+
 
   end
 end
