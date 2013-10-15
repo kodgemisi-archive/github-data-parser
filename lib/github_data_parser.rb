@@ -90,11 +90,5 @@ module GithubDataParser
         all_points.merge!(analyze_files(files))
       end
     end
-
-
-
-
-
-
   end
 end
