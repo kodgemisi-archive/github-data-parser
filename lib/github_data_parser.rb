@@ -23,12 +23,15 @@ module GithubDataParser
     end
 
 
+    # @param [String] username
+    # Example of a repo data can be found on http://developer.github.com/v3/repos/
+    # @return [Array] Array of repos
     def get_user_repos(username)
-      github_api.repos.list user: username
+      github_api.repos.list(user: username).body
     end
 
     def get_user_orgs(username)
-      github_api.orgs.list user: username
+      github_api.orgs.list(user: username).body
     end
 
     # This method returns all files commited in a repo by given username.
