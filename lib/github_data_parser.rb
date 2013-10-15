@@ -24,7 +24,7 @@ module GithubDataParser
 
 
     # @param [String] username
-    # Example of a repo data can be found on http://developer.github.com/v3/repos/
+    # == Example of a repo data can be found on http://developer.github.com/v3/repos/
     # @return [Array] Array of repos
     def get_user_repos(username)
       github_api.repos.list(user: username).body
@@ -34,12 +34,12 @@ module GithubDataParser
       github_api.orgs.list(user: username).body
     end
 
-    # This method returns all files commited in a repo by given username.
+    # This method returns all files committed by given username in a repo.
     # @param [String] username
     # @param [String] repo_name
 
     # @param [String] repo_owner # use this if its an organization repo
-    # Example:
+    # == Example:
     #   get_user_files_from_repo('beydogan', 'github_data_parser', 'kodgemisi')
     # The code above will return all commited files in repo 'kodgemisi/github_data_parser' by user 'beydogan'
 
@@ -72,7 +72,24 @@ module GithubDataParser
       end
 
       user_files
-  end
+    end
+
+    # This method returns all files committed by given username in given repos
+    # @param [String] username
+    # @param [Array] repo_list
+    # == Example
+    #   gdp = GithubDataParser.new (.....)
+    #   user_repos = gdp.get_user_repos('beydogan')
+    #   user_files = get_user_files_from_repos('beydogan', repo_list)
+    # @return [Array] Array of files
+    def get_user_files_from_repos(username, repo_list)
+      repo_list.each do |repo|
+        name = repo.name
+        owner = repo.owner.login
+        files = get_user_files_from_repo(username, name, owner)
+        all_points.merge!(analyze_files(files))
+      end
+    end
 
 
 
