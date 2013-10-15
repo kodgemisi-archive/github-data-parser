@@ -22,7 +22,7 @@ module GithubDataParser
       return self
     end
 
-
+    # This method returns all repos of username
     # @param [String] username
     # == Example of a repo data can be found on http://developer.github.com/v3/repos/
     # @return [Array] Array of repos
@@ -30,6 +30,10 @@ module GithubDataParser
       github_api.repos.list(user: username).body
     end
 
+    # This method returns all list of organizations that username member of it
+    # @param [String] username
+    # == Example of a repo data can be found on http://developer.github.com/v3/repos/
+    # @return [Array] Array of organizations
     def get_user_orgs(username)
       github_api.orgs.list(user: username).body
     end
@@ -83,12 +87,15 @@ module GithubDataParser
     #   user_files = get_user_files_from_repos('beydogan', repo_list)
     # @return [Array] Array of files
     def get_user_files_from_repos(username, repo_list)
+      result = []
       repo_list.each do |repo|
         name = repo.name
         owner = repo.owner.login
         files = get_user_files_from_repo(username, name, owner)
-        all_points.merge!(analyze_files(files))
+        result = result.concat(files)
       end
+
+      result
     end
   end
 end
