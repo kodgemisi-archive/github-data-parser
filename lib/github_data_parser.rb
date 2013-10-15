@@ -22,6 +22,7 @@ module GithubDataParser
       return self
     end
 
+
     def get_user_repos(username)
       github_api.repos.list user: username
     end
@@ -29,6 +30,37 @@ module GithubDataParser
     def get_user_orgs(username)
       github_api.orgs.list user: username
     end
+
+    # This method returns all files commited in a repo by given username.
+    # @param [String] username
+    # @param [String] repo_name
+
+    # @param [String] repo_owner # use this if its an organization repo
+    # Example:
+    #   get_user_files_from_repo('beydogan', 'github_data_parser', 'kodgemisi')
+    # The code above will return all commited files in repo 'kodgemisi/github_data_parser' by user 'beydogan'
+
+    # @return [Array] Array of files
+    def get_user_files_from_repo(username, repo_name, repo_owner = nil)
+
+      repo_owner = username if repo_owner.nil?
+
+      user_files = []
+      commits = github_api.repos.commits.list repo_owner, repo_name, :author => username #Get all commits
+
+      commits.each do |commit|
+
+        commit_details = github_api.repos.commits.get repo_owner, repo_name, commit.sha #Get commit details
+        files = commit_details.body.files #Get committed files
+        user_files.concat(files) #Add files to results
+      end
+
+      user_files
+  end
+
+
+
+
 
 
   end
