@@ -26,6 +26,10 @@ module GithubDataParser
       github_api.repos.list user: username
     end
 
+    def get_user_orgs(username)
+      github_api.orgs.list user: username
+    end
+
 
   end
 end
