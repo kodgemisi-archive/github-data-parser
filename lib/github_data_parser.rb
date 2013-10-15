@@ -40,6 +40,19 @@ module GithubDataParser
     #   get_user_files_from_repo('beydogan', 'github_data_parser', 'kodgemisi')
     # The code above will return all commited files in repo 'kodgemisi/github_data_parser' by user 'beydogan'
 
+    # Example element(file) of array
+    #{
+    #    "sha" => "a8647326344e1eda55404639ddfc5fc33782e0e6",
+    #    "filename" => "README.md",
+    #    "status" => "modified",
+    #    "additions" => 8,
+    #    "deletions" => 0,
+    #    "changes" => 8,
+    #    "blob_url" => "https://github.com/beydogan/github-commit-analyzer/blob/a8f75e95cf1c9e20dcb9172b93d59248d0fb1e32/README.md",
+    #    "raw_url" => "https://github.com/beydogan/github-commit-analyzer/raw/a8f75e95cf1c9e20dcb9172b93d59248d0fb1e32/README.md",
+    #    "contents_url" => "https://api.github.com/repos/beydogan/github-commit-analyzer/contents/README.md?ref=a8f75e95cf1c9e20dcb9172b93d59248d0fb1e32",
+    #    "patch" => "@@ -2,3 +2,11 @@ github-commit-analyzer\n ======================\n \n Simple console application which analyze a github user's commits and outputs number of the committed files by file type.\n+\n+Usage\n+======================\n+\n+```\n+bundle install\n+ruby main.rb\n+```"
+    #}
     # @return [Array] Array of files
     def get_user_files_from_repo(username, repo_name, repo_owner = nil)
 
