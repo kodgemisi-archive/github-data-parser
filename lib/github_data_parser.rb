@@ -35,7 +35,13 @@ module GithubDataParser
     # == Example of a repo data can be found on http://developer.github.com/v3/repos/
     # @return [Array] Array of organizations
     def get_user_orgs(username)
-      github_api.orgs.list(user: username).body
+      user = github_api.user username
+      github_api.get(user.rels[:organizations].href)
+    end
+
+
+    def get_org_repos(org_name)
+      github_api.organization_repositories(org_name)
     end
 
     # This method returns all files committed by given username in a repo.
@@ -68,11 +74,13 @@ module GithubDataParser
       user_files = []
       commits = github_api.commits({:owner => repo_owner, :name => repo_name}, nil, {:author => username})
 
-      commits.each do |commit|
+      commits.each_with_index do |commit, index|
 
         commit_details = github_api.get github_api.commit({:owner => repo_owner, :name => repo_name}, commit.sha).rels[:self].href #Get commit details
         files = commit_details.files #Get committed files
         user_files.concat(files) #Add files to results
+
+        sleep(0.5) if(index % 20 == 0)
       end
 
       user_files
@@ -87,14 +95,21 @@ module GithubDataParser
     #   user_files = get_user_files_from_repos('beydogan', repo_list)
     # @return [Array] Array of files
     def get_user_files_from_repos(username, repo_list)
+
+      puts "Total Number of Repos: "  + repo_list.size.to_s
+
       result = []
       repo_list.each do |repo|
+        puts "Started: " + repo.name + "\n"
         name = repo.name
         owner = repo.owner.login
         files = get_user_files_from_repo(username, name, owner)
         result = result.concat(files)
-      end
 
+        puts "Finished: " + repo.name + "\n"
+        puts "Waiting 10 secs \n"
+        #sleep(3)
+      end
       result
     end
   end
