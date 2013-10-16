@@ -9,6 +9,8 @@ Usage
 
 ```ruby
 
+require 'github_data_parser'
+
 gdp = GithubDataParser.new({
     :client_id => "CLIENT_ID",
     :client_secret => "CLIENT_SECRET",
