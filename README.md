@@ -14,7 +14,7 @@ gdp = GithubDataParser.new({
     :client_secret => "CLIENT_SECRET",
      })
 
-repos = gdp.get_user_repos('beydogan')
+repos = gdp.get_user_repos('USERNAME')
 
 repos.each do |repo|
   puts repo.full_name
