@@ -1,5 +1,5 @@
 require "github_data_parser/version"
-require 'github_api'
+require 'octokit'
 
 module GithubDataParser
 
@@ -13,11 +13,10 @@ module GithubDataParser
       self.client_id = options[:client_id]
       self.client_secret = options[:client_secret]
 
-      self.github_api = Github.new do |config|
-        config.client_id = self.client_id
-        config.client_secret = self.client_secret
-        config.per_page = 100
-      end
+      self.github_api = Octokit::Client.new({
+          :client_id => self.client_id,
+          :client_secret => self.client_secret
+          })
 
       return self
     end
@@ -27,7 +26,8 @@ module GithubDataParser
     # == Example of a repo data can be found on http://developer.github.com/v3/repos/
     # @return [Array] Array of repos
     def get_user_repos(username)
-      github_api.repos.list(user: username).body
+      user = github_api.user username
+      github_api.get(user.rels[:repos].href)
     end
 
     # This method returns all list of organizations that username member of it
@@ -66,12 +66,12 @@ module GithubDataParser
       repo_owner = username if repo_owner.nil?
 
       user_files = []
-      commits = github_api.repos.commits.list repo_owner, repo_name, :author => username #Get all commits
+      commits = github_api.commits({:owner => repo_owner, :name => repo_name}, nil, {:author => username})
 
       commits.each do |commit|
 
-        commit_details = github_api.repos.commits.get repo_owner, repo_name, commit.sha #Get commit details
-        files = commit_details.body.files #Get committed files
+        commit_details = github_api.get github_api.commit({:owner => repo_owner, :name => repo_name}, commit.sha).rels[:self].href #Get commit details
+        files = commit_details.files #Get committed files
         user_files.concat(files) #Add files to results
       end
 
