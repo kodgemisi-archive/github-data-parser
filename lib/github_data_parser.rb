@@ -15,7 +15,9 @@ module GithubDataParser
 
       self.github_api = Octokit::Client.new({
           :client_id => self.client_id,
-          :client_secret => self.client_secret
+          :client_secret => self.client_secret,
+          :auto_paginate => true,
+          :per_page => 100
           })
 
       return self
@@ -80,7 +82,7 @@ module GithubDataParser
         files = commit_details.files #Get committed files
         user_files.concat(files) #Add files to results
 
-        sleep(0.5) if(index % 20 == 0)
+        sleep(0.2) if(index % 20 == 0)
       end
 
       user_files
