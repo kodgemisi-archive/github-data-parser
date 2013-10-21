@@ -82,7 +82,7 @@ module GithubDataParser
         files = commit_details.files #Get committed files
         user_files.concat(files) #Add files to results
 
-        sleep(0.2) if(index % 20 == 0)
+        sleep(0.1) if(index % 20 == 0)
       end
 
       user_files
