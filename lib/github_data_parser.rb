@@ -28,6 +28,7 @@ module GithubDataParser
     # == Example of a repo data can be found on http://developer.github.com/v3/repos/
     # @return [Array] Array of repos
     def get_user_repos(username)
+      puts username
       user = github_api.user username
       github_api.get(user.rels[:repos].href)
     end
@@ -86,6 +87,19 @@ module GithubDataParser
       end
 
       user_files
+    end
+
+
+    def get_user_commits(username, repo_name, repo_owner = nil)
+      "Im getting commits!!!!"
+      repo_owner = username if repo_owner.nil?
+
+      github_api.commits({:owner => repo_owner, :name => repo_name}, nil, {:author => username})
+    end
+
+
+    def get_commit(commit_sha, repo, repo_owner)
+      commit_details = github_api.get github_api.commit({:owner => repo_owner, :name => repo}, commit_sha).rels[:self].href #Get commit details
     end
 
     # This method returns all files committed by given username in given repos
