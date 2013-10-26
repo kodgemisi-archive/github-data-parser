@@ -13,12 +13,14 @@ module GithubDataParser
       self.client_id = options[:client_id]
       self.client_secret = options[:client_secret]
 
-      self.github_api = Octokit::Client.new({
-          :client_id => self.client_id,
-          :client_secret => self.client_secret,
-          :auto_paginate => true,
-          :per_page => 100
-          })
+      default_options = {
+        :auto_paginate => true,
+        :per_page => 100
+      }
+      options.merge!(default_options)
+
+      self.github_api = Octokit::Client.new(options)
+
 
       return self
     end
